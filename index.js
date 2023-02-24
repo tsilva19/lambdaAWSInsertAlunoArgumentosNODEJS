@@ -21,15 +21,28 @@ exports.handler = (event, context, callback) => {
 
   // Consulta SQL para inserir um aluno na tabela de alunos
   connection.query('INSERT INTO alunos SET ?', aluno, function (error, results, fields) {
-    if (error) throw error;
-    console.log(results);
-    // Fechar a conexão com o banco de dados MySQL
-    connection.end();
-    // Retornar a resposta com o status code 201
-    const response = {
-      statusCode: 201,
-      body: 'Aluno inserido com sucesso!'
-    };
-    callback(null, response);
+   if (error) {
+    console.log(error);
+      // Fechar a conexão com o banco de dados MySQL
+      connection.end();
+      // Retornar um status code 400 e informações adicionais sobre o erro
+      const response = {
+        statusCode: 400,
+        body: JSON.stringify({ error: 'Ocorreu um erro ao inseerir o aluno.' })
+      };
+      callback(null, response);
+    }
+    else{
+     console.log(results);
+     // Fechar a conexão com o banco de dados MySQL
+     connection.end();
+     // Retornar a resposta com o status code 201
+     const response = {
+       statusCode: 201,
+       body: 'Aluno inserido com sucesso!'
+     };
+     callback(null, response);
+    }
+    
   });
 };
